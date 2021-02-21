@@ -27,7 +27,7 @@ ul { list-style: none; }
                                                             alert("websocket接続されていません");
                                                             return false;
                                                         }
-                                            socket.send(msgBox.val());
+                                            socket.send(JSON.stringify({"Message": msgBox.val()}));
                                             msgBox.val("");
                                             return false;
                                         });
@@ -39,8 +39,14 @@ ul { list-style: none; }
                                                                         alert("接続終了");
                                                                     }
                                                         socket.onmessage = function(e) {
-                                                                        console.log(e.data);
-                                                                        messages.append($("<li>").text(e.data));
+                                                                        var msg = eval("("+e.data+")");
+                                                                        messages.append(
+                                                                                        $("<li>").append(
+                                                                                                        $("<strong>").text(msg.Name + ": "),
+                                                                                                                        $("<span>").text(msg.Message)
+                                                                                                                        )
+                                                                                                    );
+
                                                                     }
                                                     }
                         });
